@@ -58,7 +58,7 @@ public class RobotContainer {
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   
-  private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
+  public final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
   private Command runAuto1 = drivetrain.getAutoPath("Auto1");
   private Command runAuto2 = drivetrain.getAutoPath("right path");
@@ -73,12 +73,13 @@ public class RobotContainer {
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
-  public static final double kDSpeedDiv =  1.3; //1.3; // Value for controlling controller sensitivity
+  public static final double kDSpeedDiv =  1.2; // Value for controlling controller sensitivity
   public static final double kAAngleDiv =  1.0; // Value for controllig how fast robot moves when spining
 
   private void configureBindings() {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(()  ->  {
+          //System.out.println("joystick.getRightX=" + -lJoystick.getRightX() );
           //System.out.println("joystick.getRightX=" + -lJoystick.getRightX() );
            return drive.withVelocityX(lJoystick.getLeftY() * MaxSpeed/kDSpeedDiv) // Drive forward with
                                                                                            // negative Y (forward)
@@ -97,54 +98,6 @@ public class RobotContainer {
         zeroPigeon();
         System.out.println("pigeon rezeroed");
       }));
-
-      lJoystick.rightTrigger().onTrue( // move right motor clockwise on right trigger
-      new InstantCommand(() -> {
-        rClimber.set(0.5);
-      })
-    );
-
-    lJoystick.rightTrigger().onFalse( // stop when not in use
-      new InstantCommand(() -> {
-        rClimber.set(0);
-      })
-    );
-
-    lJoystick.rightBumper().onTrue( // move right motor counter-clockwise on right bumper
-      new InstantCommand(() -> {
-        rClimber.set(-0.5);
-      })
-    );
-
-    lJoystick.rightBumper().onFalse( // stop when not in use
-      new InstantCommand(() -> {
-        rClimber.set(0);
-      })
-    );
-
-    lJoystick.leftTrigger().onTrue( // move left motor clockwise on right trigger
-      new InstantCommand(() -> {
-        lClimber.set(0.5);
-      })
-    );
-
-    lJoystick.leftTrigger().onFalse( // stop motor when not in use
-      new InstantCommand(() -> {
-        lClimber.set(0);
-      })
-    );
-
-    lJoystick.leftBumper().onTrue( // move left motor counter-clockwise on right bumper
-      new InstantCommand(() -> {
-        lClimber.set(-0.5);
-      })
-    );
-
-    lJoystick.leftBumper().onFalse( // stop motor when not in use
-      new InstantCommand(() -> {
-        lClimber.set(0);
-      })
-    );
     
 
     // reset the field-centric heading on left bumper press
