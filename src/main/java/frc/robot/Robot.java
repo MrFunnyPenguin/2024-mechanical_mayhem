@@ -14,13 +14,11 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-  public ShooterContainer m_operatorController;
   public Arm ArmOperatorController;
 
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer(); // Initalize Xbox controller for swerve drives
-    m_operatorController = new ShooterContainer(); // Initalize Xbox controller for for shooter
     ArmOperatorController = new Arm(); // Initalize Xbox controller for arms
   }
 

@@ -30,12 +30,12 @@ public final class ShooterConstants {
 
     // Speeds for wheels when intaking and launching. Intake speeds are negative to run the wheels
     // in reverse
-    public static final double kLauncherSpeed = 100;
+    public static final double kLauncherSpeed = 80;
     public static final double kLaunchFeederSpeed = 100;
     public static final double kIntakeLauncherSpeed = -6;
     public static final double kIntakeFeederSpeed = -.6;
 
-    public static final double kLauncherDelay = 2;
+    public static final double kLauncherDelay = 0.9;
   }
 }
 

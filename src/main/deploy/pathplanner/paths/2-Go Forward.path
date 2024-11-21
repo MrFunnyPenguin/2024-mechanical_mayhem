@@ -4,24 +4,24 @@
     {
       "anchor": {
         "x": 1.0,
-        "y": 1.0
+        "y": 2.0
       },
       "prevControl": null,
       "nextControl": {
         "x": 2.0,
-        "y": 1.0
+        "y": 2.0
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.0,
-        "y": 1.0
+        "x": 2.2,
+        "y": 2.0
       },
       "prevControl": {
-        "x": 1.0,
-        "y": 1.0
+        "x": 1.2000000000000002,
+        "y": 2.0
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 179.30103444125558,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Sample 2024 Mayhem Paths",
   "previewStartingState": {
-    "rotation": -178.86461762077437,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": false
