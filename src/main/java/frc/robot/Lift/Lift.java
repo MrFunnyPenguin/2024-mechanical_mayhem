@@ -1,21 +1,20 @@
 
 package frc.robot.Lift;
 
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-
-import frc.robot.generated.TunerConstants;
-import frc.robot.RobotContainer;
-
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.Utils;
+
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class Lift {
+
+DigitalInput toplimitSwitch = new DigitalInput(0);
+DigitalInput bottomlimitSwitch = new DigitalInput(1);
+PWMVictorSPX motor = new PWMVictorSPX(0);
+Joystick joystick = new Joystick(0);
 
   public CommandXboxController ArmOperatorController =
       new CommandXboxController(0);
@@ -51,7 +50,34 @@ public class Lift {
     );
     }
 
+public void setLimitSwitch(double speed) {
+    if (speed > 0) {
+        if (toplimitSwitch.get()) {
+            // We are going up and top limit is tripped so stop
 
-
+            
+           rClimber.set(0);
+        
+        } else {
+            // We are going up but top limit is not tripped so go at commanded speed
+            System.out.println("tripped");
+        }
+    } else {
+        if (bottomlimitSwitch.get()) {
+            // We are going down and bottom limit is tripped so stop
+            motor.set(0);
+        } else {
+            // We are going down but bottom limit is not tripped so go at commanded speed
+            motor.set(speed);
+        }
+    }
 }
-
+public void getLimitSwitch (){
+   if (toplimitSwitch.get()) {
+            // We are going up and top limit is tripped so stop
+           System.out.println("tripped");
+        
+  
+   }
+}
+}
