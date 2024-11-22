@@ -1,14 +1,15 @@
 {
-  "robotWidth": 0.9,
-  "robotLength": 0.9,
-  "holonomicMode": true,
+  "robotWidth": 0.5,
+  "robotLength": 0.5,
+  "holonomicMode": false,
   "pathFolders": [
+    "Sample 2024 Mayhem Paths",
     "left",
-    "right",
-    "middle"
+    "middle",
+    "right"
   ],
   "autoFolders": [
-    "New Folder"
+    "2024 Mayhem Auto"
   ],
   "defaultMaxVel": 3.55,
   "defaultMaxAccel": 3.0,

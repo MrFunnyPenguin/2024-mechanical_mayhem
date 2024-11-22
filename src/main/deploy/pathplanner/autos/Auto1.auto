@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2.131641329472284,
-      "y": 1.8063389257368858
+      "x": 1.0,
+      "y": 2
     },
-    "rotation": 83.48019824834297
+    "rotation": 0.292747240346036
   },
   "command": {
     "type": "sequential",
@@ -14,12 +14,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Forward_Test"
+            "pathName": "2-Go Forward"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "2024 Mayhem Auto",
   "choreoAuto": false
 }

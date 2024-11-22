@@ -10,6 +10,7 @@ package frc.robot;
 import frc.robot.Shooter.ShooterContainer;
 import frc.robot.commands.LaunchNote;
 import frc.robot.commands.PrepareLaunch;
+import frc.robot.Shooter.CANLauncher;
 import frc.robot.Shooter.ShooterConstants;
 import frc.robot.Shooter.ShooterConstants.LauncherConstants;
 import static frc.robot.Shooter.ShooterConstants.LauncherConstants.kLaunchFeederSpeed;
@@ -29,16 +30,20 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.generated.TunerConstants; 
 import com.ctre.phoenix6.hardware.TalonFX;
 
-//import frc.robot.Arm.Arm;
+import frc.robot.Arm.Arm;
 
 public class RobotContainer {
-  
+  public ShooterContainer m_operatorController;
+ 
+
   public final CommandXboxController lJoystick = new CommandXboxController(0);
   
     
@@ -55,9 +60,10 @@ public class RobotContainer {
   
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
-  private Command runAuto1 = drivetrain.getAutoPath("demo path");
+  private Command runAuto1 = drivetrain.getAutoPath("Auto1");
   private Command runAuto2 = drivetrain.getAutoPath("right path");
-  private Command runAuto3 = drivetrain.getAutoPath("left path"); 
+  private Command runAuto3 = drivetrain.getAutoPath("left path");
+  private Command runMayhemAuto = drivetrain.getAutoPath("Auto1"); 
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.25) // We use a 25% deadband with our Xbox controllers
@@ -74,6 +80,7 @@ public class RobotContainer {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(()  ->  {
           //System.out.println("joystick.getRightX=" + -lJoystick.getRightX() );
+          //System.out.println("joystick.getRightX=" + -lJoystick.getRightX() );
            return drive.withVelocityX(lJoystick.getLeftY() * MaxSpeed/kDSpeedDiv) // Drive forward with
                                                                                            // negative Y (forward)
             .withVelocityY(lJoystick.getLeftX() * MaxSpeed/kDSpeedDiv) // Drive left with negative X (left)
@@ -86,8 +93,8 @@ public class RobotContainer {
      //lJoystick.b().whileTrue(drivetrain
        // .applyRequest(() -> point.withModuleDirection(new Rotation2d(-lJoystick.getLeftY(), -lJoystick.getLeftX()))));
       lJoystick.x().whileTrue(drivetrain.applyRequest(() -> drive.withRotationalRate(MaxAngularRate)));
-      lJoystick.b().whileTrue(drivetrain.applyRequest(() -> drive.withRotationalRate(MaxAngularRate * -1)));
-      lJoystick.leftBumper().whileTrue(new InstantCommand(() -> {
+      //lJoystick.b().whileTrue(drivetrain.applyRequest(() -> drive.withRotationalRate(MaxAngularRate * -1)));
+      lJoystick.b().whileTrue(new InstantCommand(() -> {
         zeroPigeon();
         System.out.println("pigeon rezeroed");
       }));
@@ -132,6 +139,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureBindings();
+    m_operatorController = new ShooterContainer();
   }
 
   public void zeroPigeon() {
@@ -140,7 +148,24 @@ public class RobotContainer {
   }
  
   public Command getAutonomousCommand() {
-    return runAuto1;
+    //return runAuto1;
+    SequentialCommandGroup auto_commands = new SequentialCommandGroup(
+      drivetrain.runOnce(() -> drivetrain.setControl(new SwerveRequest.RobotCentric().withRotationalRate(Math.PI/2))),
+      new WaitCommand(1.3141569),
+      drivetrain.runOnce(() -> drivetrain.setControl(new SwerveRequest.RobotCentric().withRotationalRate(0.0))),
+      new InstantCommand(() -> rClimber.set(0.5)),
+      new WaitCommand(1),
+      new InstantCommand(() -> rClimber.set(0)),
+      m_operatorController.launch(),
+      new InstantCommand(() -> rClimber.set(-0.5)),
+      new WaitCommand(1),
+      new InstantCommand(() -> rClimber.set(0)),
+      drivetrain.runOnce(() -> drivetrain.setControl(new SwerveRequest.RobotCentric().withRotationalRate(Math.PI/2))),
+      new WaitCommand(1.3141569),
+      drivetrain.runOnce(() -> drivetrain.setControl(new SwerveRequest.RobotCentric().withRotationalRate(0.0))),
+      runAuto1
+    );
+    return auto_commands;
     //SwerveRequest driveForward = new SwerveRequest.RobotCentric().withVelocityX(.5);
 
     //return drivetrain.run(() -> drivetrain.setControl(driveForward));

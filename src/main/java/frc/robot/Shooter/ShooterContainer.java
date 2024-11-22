@@ -39,6 +39,16 @@ public class ShooterContainer {
     configureBindings();
   }
 
+  public Command launch()
+  {
+    //Solved infinite spinning wheel issue, first timeout powers up the wheel, second timeout is the wheel at full power, and is what allows us to stop it.
+    return new PrepareLaunch(m_launcher)
+                .withTimeout(LauncherConstants.kLauncherDelay)
+                .andThen(new LaunchNote(m_launcher))
+                .withTimeout(2.0)
+                .handleInterrupt(() -> m_launcher.stop());
+  }
+
   /**
    * Use this method to define your trigger->command mappings. Triggers can be accessed via the
    * named factory methods in the Command* classes in edu.wpi.first.wpilibj2.command.button (shown
@@ -54,7 +64,7 @@ public class ShooterContainer {
                 .andThen(new LaunchNote(m_launcher))
                 .handleInterrupt(() -> m_launcher.stop()));
                 System.out.println("Shooter Has Been Fired!"); // print Shooter Fired! in terminal
-
+/*Commented out because a is used to rezero the pigeon.*/
     // Set up a binding to run the intake command while the operator is pressing and holding the
     // left Bumper
     m_operatorController.y().whileTrue(m_launcher.getIntakeCommand());
