@@ -38,7 +38,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.generated.TunerConstants; 
 import com.ctre.phoenix6.hardware.TalonFX;
 
-import frc.robot.Arm.Arm;
+import frc.robot.Lift.Lift;
 
 public class RobotContainer {
   public ShooterContainer m_operatorController;
